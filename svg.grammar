@@ -1,51 +1,80 @@
 Package prueba1;
 
 Helpers
+{
     letra = ['a'..'z' 'A'..'Z'];
     num = ['0'..'9'];
-    espacio = ['' '\n' '\t' '\r'];
+    espacio = [' ' '\n' '\t' '\r'];
     svg_eti = 'svg';
     circulo_eti = 'circle';
     rectangulo_eti = 'rect';
-    linea_eti = 'rect';
+    linea_eti = 'line';
     elipse_eti = 'ellipse';
     poligono_eti = 'polygon';
     polilinea_eti = 'polyline';
     guion = '-';
-
+}
 
 Tokens
+{
     inicio = '<';
     fin = '>';
     igual = '=';
     doblecom = '"';
     slash = '/';
     alert = '!';
+}
 
 Productions
-    tipodeDoc = inicio alert 'DOCTYPE' espacio 'html fin
+{
+    tipodeDoc =
+        inicio alert 'DOCTYPE' espacio 'html' fin;
 
-    html = inicio 'html' fin cuerpo inicio slash 'html' fin
+    html =
+        inicio 'html' fin cuerpo inicio slash 'html' fin;
 
-    cuerpo = inicio 'body' fin archivo inicio slash 'body' fin
+    cuerpo =
+        inicio 'body' fin archivo inicio slash 'body' fin;
 
-    archivo = svg; 
+    archivo =
+        svg;
 
-    figuras = circulo* | linea* | rectangulo* | elipse* | poligono* | polilinea*;
+    figuras =
+        circulo* |
+        linea* |
+        rectangulo* |
+        elipse* |
+        poligono* |
+        polilinea*;
 
-    svg = inicio svg_eti datos? fin figuras? inicio slash svg_eti fin;
+    svg =
+        inicio svg_eti datos* fin figuras* inicio slash svg_eti fin;
 
-    circulo = inicio circulo_eti datos? slash fin
+    circulo =
+        inicio circulo_eti datos* slash fin;
 
-    linea = inicio linea_eti datos' slash fin
+    linea =
+        inicio linea_eti datos* slash fin;
 
-    rectangulo = inicio rectangulo_eti datos? slash fin
+    rectangulo =
+        inicio rectangulo_eti datos* slash fin;
 
-    elipse = inicio elipse_eti datos? slash fin
+    elipse =
+        inicio elipse_eti datos* slash fin;
 
-    poligono = inicio poligono_eti datos? slash fin
+    poligono =
+        inicio poligono_eti datos* slash fin;
 
-    datos = atributo igual valor;
-    
-    valor = num | doblecom (letra|guion)* doblecom;
+    polilinea =
+        inicio polilinea_eti datos* slash fin;
 
+    datos =
+        atributo igual valor;
+
+    atributo =
+        letra (letra | num | guion)*;
+
+    valor =
+        num |
+        doblecom (letra | num | guion)* doblecom;
+}

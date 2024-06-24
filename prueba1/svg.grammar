@@ -1,0 +1,184 @@
+
+Helpers
+    letra = [['a'..'z']+['A'..'Z']]+;
+    num = ['0'..'9']+;
+    guion = '-';    
+    comillas = '"';
+    doctype = 'doctype';
+    bodyaux = '<body>';
+    finbodyaux = '</body>';
+    svg_etiaux = '<svg ';
+    finsvgaux = '</svg>';
+    circulo_etiaux = '<circle';
+    rectangulo_etiaux = '<rect';
+    linea_etiaux = '<line';
+    elipse_etiaux = '<ellipse';
+    poligono_etiaux = '<polygon';
+    polilinea_etiaux = '<polyline';
+    auxhtml = '<html>';
+    finhtmlaux = '</html>';
+    newline = (13|10)+;
+    widthaux = 'width';
+    heightaux = 'height';
+    tabaux = (09);
+    cxaux = 'cx=';
+    cyaux = 'cy=';
+    raux = 'r=';
+    fillaux = 'fill='|'fill:';
+    strokeaux = 'stroke='|'stroke:';
+    strokewidthaux = 'stroke-width='|'stroke-width:';
+    styleaux = 'style=';
+    x1waux = 'x1=';
+    x2waux = 'x2=';
+    y1waux = 'y1=';
+    y2waux = 'y2=';
+    xwaux = 'x=';
+    ywaux = 'y=';
+    rxwaux = 'rx=';
+    rywaux = 'ry=';
+    pointswaux= 'points=';
+
+    
+Tokens
+    numero = num;
+    coma =',';
+    espacio = ' ';
+    finfigura = '/>';
+    tab = tabaux;
+    blank = (' '| (09 09))+;
+    nl = newline;
+    semicolon = ';';
+    abrir = ('<');
+    cerrar = '>';
+    igual = '=';
+    slash = '/';
+    alert = '!';
+    doctype = '<!DOCTYPE html';
+    valor = comillas num | comillas(letra | num | guion)*comillas;
+    atributo = letra(letra | num | guion)*;
+    body = bodyaux;
+    finbody = finbodyaux;
+    svg_eti = svg_etiaux;
+    circulo_eti = circulo_etiaux;
+    rectangulo_eti = rectangulo_etiaux;
+    linea_eti = linea_etiaux;
+    elipse_eti = elipse_etiaux;
+    poligono_eti = poligono_etiaux;
+    polilinea_eti = polilinea_etiaux;
+    comillas = comillas;
+    html = auxhtml;
+    finhtml =finhtmlaux;
+    width = widthaux;
+    height = heightaux;
+    cxw = cxaux;
+    cyw = cyaux;
+    rw = raux;
+    fillw = fillaux;
+    strokew = strokeaux;
+    strokewidthw = strokewidthaux;
+    stylew = styleaux;
+    x1w = x1waux;
+    x2w = x2waux;
+    y1w = y1waux;
+    y2w = y2waux;
+    finsvg = finsvgaux;
+    xw= xwaux;
+    yw = ywaux;
+    rxw = rxwaux;
+    ryw = rywaux;
+    pointsw = pointswaux;
+
+
+    
+
+Ignored Tokens
+    blank, nl;
+
+Productions
+    tipodedoc =
+       doctype cerrar fightml;
+
+    fightml =
+        html cuerpo finhtml;
+
+    cuerpo =
+       body svg finbody;
+
+    svg =
+        svg_eti datosvg cerrar tab figuras;
+
+    datosvg=
+       width height;
+    
+    figuras =
+        finsvg
+        |{circulo} circulo 
+        | {linea} linea 
+        | {rectangulo} rectangulo 
+        | {elipse} elipse
+        | {poligono} poligono 
+        | {polilinea} polilinea;
+    circulo =
+        circulo_eti cx cy r fill? stroke? strokewidth? finfigura figuras;
+    cx=
+        cxw valor;
+    cy=
+        cyw valor;
+    r=
+        rw valor;
+
+    fill=
+        fillw valor;    
+    stroke=
+        strokew valor;
+    strokewidth=
+        strokewidthw valor;
+    style=
+        stylew 
+        [iniciostyle]:comillas
+        fill 
+        [primerseparador]:semicolon
+        stroke 
+        [segundoseparador]:semicolon 
+        strokewidth 
+        [finstyle]:comillas;
+    linestyle=
+        stylew
+        [iniciostyle]:comillas
+        stroke 
+        [segundoseparador]:semicolon 
+        strokewidth 
+        [finstyle]:comillas;
+
+    linea =
+        linea_eti x1 x2 y1 y2 linestyle finfigura figuras;
+    x1=
+        x1w valor;
+    x2=
+        x2w valor;
+    y1=
+        y1w valor;
+    y2=
+        y2w valor;
+
+    rectangulo =
+        rectangulo_eti x y width height style;
+    x=
+        xw valor;
+    y=
+        yw valor;
+    
+    elipse =
+        elipse_eti cx cy rx ry style;
+    rx=
+        rxw valor;
+    ry=
+        ryw valor;
+    
+    poligono =
+        poligono_eti pointsw [a]:comillas points [b]:comillas style;
+    points=
+        [x]:numero coma [y]:numero espacio;
+    
+    polilinea =
+        polilinea_eti pointsw [a]:comillas points [b]:comillas style ;
